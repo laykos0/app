@@ -3,7 +3,7 @@ from starlette.middleware.cors import CORSMiddleware
 
 from api import routers
 from api.routers.exception_handlers import handle_404_not_found
-from db import init_db
+from core.mongo import init_db
 from infrastructure.exceptions import CustomNotFoundException
 
 app = FastAPI()
