@@ -2,7 +2,7 @@ import beanie
 import motor
 import motor.motor_asyncio
 
-from api.domain.users import User
+from domain.users import User
 
 MONGODB_URL = 'mongodb://localhost:27017'
 

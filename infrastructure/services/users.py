@@ -1,6 +1,6 @@
 from beanie import PydanticObjectId
 
-from api.domain.users import CreateUserDTO, UpdateUserDTO
+from domain.users import CreateUserDTO, UpdateUserDTO
 from infrastructure.exceptions import UserNotFoundException
 from infrastructure.repositories.users import post, get, get_all, put, delete
 

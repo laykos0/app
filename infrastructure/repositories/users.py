@@ -1,6 +1,6 @@
 from beanie import PydanticObjectId
 
-from api.domain.users import User
+from domain.users import User
 
 
 async def post(user: User):
