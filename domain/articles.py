@@ -12,6 +12,7 @@ class Article(Document):
     date_modified: datetime = Field(default_factory=lambda: datetime.utcnow(),
                                     description="Date modified of the article.")
     deleted: bool = Field(False, description="Soft delete status.")
+    approved: bool = Field(False, description="Approved status.")
     version: int = Field(0, description="Version of the article.")
 
     class Settings:
@@ -19,6 +20,11 @@ class Article(Document):
 
     def to_version(self):
         return ArticleVersion(original_article_id=self.id, **self.dict(exclude={"id"}))
+
+    def update_version(self, user_id: PydanticObjectId, date_modified: datetime):
+        self.author_id = user_id
+        self.date_modified = date_modified
+        self.version = self.version + 1
 
 
 class ArticleVersion(Article):
