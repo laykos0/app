@@ -35,14 +35,14 @@ async def put(article_id: PydanticObjectId, user_id: PydanticObjectId, update_ar
     article.name = update_article.name
     article.description = update_article.description
     article.price = update_article.price
-    article.update_version(user_id, update_article.date_modified)
+    article.update_version(user_id)
     await article.save()
     return article
 
 
 async def delete(article_id: PydanticObjectId, user_id: PydanticObjectId):
     article = await get(article_id)
-    article.update_version(user_id, datetime.utcnow())
+    article.update_version(user_id)
     article.deleted = True
     await article.save()
 

@@ -21,9 +21,9 @@ class Article(Document):
     def to_version(self):
         return ArticleVersion(original_article_id=self.id, **self.dict(exclude={"id"}))
 
-    def update_version(self, user_id: PydanticObjectId, date_modified: datetime):
+    def update_version(self, user_id: PydanticObjectId):
         self.author_id = user_id
-        self.date_modified = date_modified
+        self.date_modified = datetime.utcnow()
         self.version = self.version + 1
 
 
