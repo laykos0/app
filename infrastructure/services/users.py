@@ -12,9 +12,9 @@ async def insert(create_user_dto: CreateUserDTO):
 
 async def find(user_id: PydanticObjectId):
     user = await get(user_id)
-    if not user:
-        raise UserNotFoundException(user_id)
-    return user
+    if user:
+        return user
+    raise UserNotFoundException(user_id)
 
 
 async def find_all():
@@ -24,13 +24,13 @@ async def find_all():
 async def update(user_id: PydanticObjectId, update_user_dto: UpdateUserDTO):
     user = update_user_dto.to_document()
     updated_user = await put(user_id, user)
-    if not updated_user:
-        raise UserNotFoundException(user_id)
-    return updated_user
+    if updated_user:
+        return updated_user
+    raise UserNotFoundException(user_id)
 
 
 async def remove(user_id: PydanticObjectId):
     user = await get(user_id)
-    if not user:
-        raise UserNotFoundException(user_id)
-    await delete(user_id)
+    if user:
+        await delete(user_id)
+    raise UserNotFoundException(user_id)

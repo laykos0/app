@@ -18,11 +18,12 @@ async def get(article_id: PydanticObjectId):
 
 
 async def get_versions(article_id: PydanticObjectId):
-    return await ArticleVersion.find({"original_article_id": article_id}).to_list()
+    return await ArticleVersion.find(ArticleVersion.original_article_id == article_id).to_list()
 
 
 async def get_version(article_id: PydanticObjectId, version: int):
-    return await ArticleVersion.find_one({"original_article_id": article_id, "version": version})
+    return await ArticleVersion.find_one(ArticleVersion.original_article_id == article_id,
+                                         ArticleVersion.version == version)
 
 
 async def get_available(available: bool):
@@ -34,16 +35,19 @@ async def put(article_id: PydanticObjectId, user_id: PydanticObjectId, update_ar
     article.name = update_article.name
     article.description = update_article.description
     article.price = update_article.price
-    article.author_id = user_id
-    article.date_modified = update_article.date_modified
-    article.version = article.version + 1
+    await update_version(article, user_id, update_article.date_modified)
     await article.save()
     return article
 
 
 async def delete(article_id: PydanticObjectId, user_id: PydanticObjectId):
     article = await get(article_id)
-    article.author_id = user_id
-    article.date_modified = datetime.utcnow().isoformat()
+    await update_version(article, user_id, datetime.utcnow())
     article.deleted = True
     await article.save()
+
+
+async def update_version(article: Article, user_id: PydanticObjectId, date_modified: datetime):
+    article.author_id = user_id
+    article.date_modified = date_modified
+    article.version = article.version + 1
