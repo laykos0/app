@@ -16,3 +16,13 @@ class CustomNotFoundException(CustomException):
 class UserNotFoundException(CustomNotFoundException):
     def __init__(self, user_id: PydanticObjectId):
         super().__init__('user-not-found', f'User {user_id} not found.')
+
+
+class ArticleNotFoundException(CustomNotFoundException):
+    def __init__(self, article_id: PydanticObjectId):
+        super().__init__('article-not-found', f'Article {article_id} not found.')
+
+
+class VersionNotFoundException(CustomNotFoundException):
+    def __init__(self, article_id: PydanticObjectId, version: int):
+        super().__init__('article-version-not-found', f'Article {article_id}, version {version} not found.')

@@ -8,14 +8,14 @@ router = APIRouter()
 
 
 @router.post("",
-             description=""
+             description="Creates a new user."
              )
 async def create_user(create_user_dto: CreateUserDTO = Body()):
     await insert(create_user_dto)
 
 
 @router.get("/{user_id}",
-            description="",
+            description="Retrieves one user.",
             response_model=User
             )
 async def get_user(user_id: PydanticObjectId = Path()):
@@ -23,7 +23,7 @@ async def get_user(user_id: PydanticObjectId = Path()):
 
 
 @router.get("",
-            description="",
+            description="Retrieves all users.",
             response_model=list[User]
             )
 async def get_all_users():
@@ -32,14 +32,14 @@ async def get_all_users():
 
 @router.put(
     "/{user_id}",
-    description="",
+    description="Updates an user.",
 )
 async def update_user(user_id: PydanticObjectId = Path(), update_user_dto: UpdateUserDTO = Body()):
     await update(user_id, update_user_dto)
 
 
 @router.delete("/{user_id}",
-               description=""
+               description="Deletes an user."
                )
 async def delete_user(user_id: PydanticObjectId = Path()):
     await remove(user_id)

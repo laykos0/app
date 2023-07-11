@@ -13,6 +13,9 @@ class User(Document):
     name: str = Field(..., description="Name of the user.", example="name")
     roles: list[Role] = Field(..., description="Roles of the user.", example=["user"])
 
+    class Settings:
+        name = "users"
+
 
 class CreateUserDTO(BaseModel):
     name: str = Field(..., description="Name of the new user.", example="name")
@@ -23,8 +26,8 @@ class CreateUserDTO(BaseModel):
 
 
 class UpdateUserDTO(BaseModel):
-    name: str = Field(..., description="New name of the new user.", example="name")
-    roles: list[str] = Field(..., description="New role of the new user.", example=["user"])
+    name: str = Field(..., description="New name of the new user.", example="new_name")
+    roles: list[str] = Field(..., description="New role of the new user.", example=["admin"])
 
     def to_document(self):
         return User(**self.dict())
