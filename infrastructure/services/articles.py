@@ -3,7 +3,7 @@ from beanie import PydanticObjectId
 from domain.articles import CreateArticleDTO, UpdateArticleDTO
 from infrastructure.exceptions import ArticleNotFoundException, VersionNotFoundException
 from infrastructure.repositories.articles import post, get, put, delete, post_version, get_available, get_versions, \
-    get_version
+    get_version, get_versions_approved
 
 
 async def insert(user_id: PydanticObjectId, create_article_dto: CreateArticleDTO):
@@ -17,10 +17,13 @@ async def find(article_id: PydanticObjectId):
     raise ArticleNotFoundException(article_id)
 
 
-async def find_versions(article_id: PydanticObjectId):
+async def find_versions(article_id: PydanticObjectId, approved: bool):
     article = await get(article_id)
     if article:
-        return await get_versions(article_id)
+        if approved:
+            return await get_versions_approved(article_id)
+        else:
+            return await get_versions(article_id)
     raise ArticleNotFoundException(article_id)
 
 

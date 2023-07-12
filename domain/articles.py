@@ -47,6 +47,7 @@ class UpdateArticleDTO(BaseModel):
     name: str = Field(..., description="New name of the article.", example="Book")
     description: str | None = Field(..., description="New description of the article.")
     price: int = Field(..., description="New price of the article.", example="1")
+    approved: bool = Field(False, description="Approved status.")
 
     def to_document(self, user_id: PydanticObjectId):
         return Article(author_id=user_id, **self.dict())

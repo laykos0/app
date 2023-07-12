@@ -1,5 +1,3 @@
-from datetime import datetime
-
 from beanie import PydanticObjectId
 
 from domain.articles import Article, ArticleVersion
@@ -21,13 +19,20 @@ async def get_versions(article_id: PydanticObjectId):
     return await ArticleVersion.find(ArticleVersion.original_article_id == article_id).to_list()
 
 
+async def get_versions_approved(article_id: PydanticObjectId):
+    return await ArticleVersion.find(ArticleVersion.original_article_id == article_id,
+                                     ArticleVersion.approved == True
+                                     ).to_list()
+
+
 async def get_version(article_id: PydanticObjectId, version: int):
     return await ArticleVersion.find_one(ArticleVersion.original_article_id == article_id,
-                                         ArticleVersion.version == version)
+                                         ArticleVersion.version == version
+                                         )
 
 
 async def get_available(available: bool):
-    return await Article.find({"deleted": not available}).to_list()
+    return await Article.find(Article.deleted != available).to_list()
 
 
 async def put(article_id: PydanticObjectId, user_id: PydanticObjectId, update_article: Article):
@@ -35,6 +40,7 @@ async def put(article_id: PydanticObjectId, user_id: PydanticObjectId, update_ar
     article.name = update_article.name
     article.description = update_article.description
     article.price = update_article.price
+    article.approved = update_article.approved
     article.update_version(user_id)
     await article.save()
     return article
@@ -45,6 +51,3 @@ async def delete(article_id: PydanticObjectId, user_id: PydanticObjectId):
     article.update_version(user_id)
     article.deleted = True
     await article.save()
-
-
-

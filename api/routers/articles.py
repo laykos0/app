@@ -27,8 +27,8 @@ async def get_article(article_id: PydanticObjectId = Path()):
             description="Retrieves all historical versions of an article.",
             response_model=list[ArticleVersion]
             )
-async def get_article_versions(article_id: PydanticObjectId = Path()):
-    return await find_versions(article_id)
+async def get_article_versions(article_id: PydanticObjectId = Path(), approved: bool = Query(default=True)):
+    return await find_versions(article_id, approved)
 
 
 @router.get("/{article_id}/versions/{version}",
