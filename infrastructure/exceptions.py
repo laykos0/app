@@ -1,5 +1,7 @@
 from beanie import PydanticObjectId
 
+from domain.articles import ArticleId
+
 
 class CustomException(Exception):
     def __init__(self, error_type: str, message: str):
@@ -19,10 +21,10 @@ class UserNotFoundException(CustomNotFoundException):
 
 
 class ArticleNotFoundException(CustomNotFoundException):
-    def __init__(self, article_id: PydanticObjectId):
+    def __init__(self, article_id: ArticleId):
         super().__init__('article-not-found', f'Article {article_id} not found.')
 
 
 class VersionNotFoundException(CustomNotFoundException):
-    def __init__(self, article_id: PydanticObjectId, version: int):
+    def __init__(self, article_id: ArticleId, version: int):
         super().__init__('article-version-not-found', f'Article {article_id}, version {version} not found.')

@@ -2,14 +2,14 @@ from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
 
 from api import routers
-from config import settings, api_title, api_description, api_tags
+from core.settings import settings
 from api.routers.exception_handlers import handle_404_not_found
 from core.mongo import init_db
 from infrastructure.exceptions import CustomNotFoundException
 
-app = FastAPI(title=api_title,
-              description=api_description,
-              openapi_tags=api_tags)
+app = FastAPI(title=settings.api_title,
+              description=settings.api_description,
+              openapi_tags=settings.api_tags)
 app.include_router(routers.router)
 
 
@@ -38,3 +38,4 @@ app.add_middleware(
 )
 
 app.add_exception_handler(CustomNotFoundException, handle_404_not_found)
+

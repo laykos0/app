@@ -4,6 +4,8 @@ from domain.users import CreateUserDTO, UpdateUserDTO
 from infrastructure.exceptions import UserNotFoundException
 from infrastructure.repositories.users import post, get, get_all, put, delete
 
+# TODO: Maybe invert naming
+
 
 async def insert(create_user_dto: CreateUserDTO):
     user = create_user_dto.to_document()

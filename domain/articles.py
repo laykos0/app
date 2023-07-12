@@ -3,35 +3,49 @@ from datetime import datetime
 from beanie import Document, PydanticObjectId
 from pydantic import Field, BaseModel
 
+ArticleId = str
 
-class Article(Document):
-    name: str = Field(..., description="Name of the article.", example="Book")
-    description: str | None = Field(..., description="Description of the article.")
-    price: int = Field(..., description="Price of the article.", example="1")
-    author_id: PydanticObjectId = Field(..., description="Author of the article.")
+
+class Version(BaseModel):
+    author_id: PydanticObjectId | None = Field(None, description="Author of the article.")
     date_modified: datetime = Field(default_factory=lambda: datetime.utcnow(),
                                     description="Date modified of the article.")
     deleted: bool = Field(False, description="Soft delete status.")
     approved: bool = Field(False, description="Approved status.")
-    version: int = Field(0, description="Version of the article.")
+    number: int = Field(0, description="Version number of the article.")
+
+    def update_version(self, author_id: PydanticObjectId, approved: bool = None, deleted: bool = None):
+        self.author_id = author_id
+        self.date_modified = datetime.utcnow()
+        self.number += 1
+        if approved is not None:
+            self.approved = approved
+        if deleted is not None:
+            self.deleted = deleted
+
+    def approve_version(self, author_id: PydanticObjectId):
+        self.update_version(author_id, approved=True)
+
+    def disapprove_version(self, author_id: PydanticObjectId):
+        self.update_version(author_id, approved=False)
+
+    def delete_version(self, author_id: PydanticObjectId):
+        self.update_version(author_id, deleted=True)
+
+    def restore_version(self, author_id: PydanticObjectId):
+        self.update_version(author_id, deleted=False)
+
+
+class Article(Document):
+    article_id: ArticleId = Field(default_factory=lambda: datetime.utcnow().isoformat(),
+                                  description="Id of the article.")
+    name: str = Field(..., description="Name of the article.", example="Book")
+    description: str | None = Field(..., description="Description of the article.")
+    price: int = Field(..., description="Price of the article.", example="1")
+    version: Version = Field(Version(), description="Version of the article.")
 
     class Settings:
         name = "articles"
-
-    def to_version(self):
-        return ArticleVersion(original_article_id=self.id, **self.dict(exclude={"id"}))
-
-    def update_version(self, user_id: PydanticObjectId):
-        self.author_id = user_id
-        self.date_modified = datetime.utcnow()
-        self.version = self.version + 1
-
-
-class ArticleVersion(Article):
-    original_article_id: PydanticObjectId = Field(description="ID of the original article.")
-
-    class Settings:
-        name = "article_versions"
 
 
 class CreateArticleDTO(BaseModel):
@@ -39,15 +53,14 @@ class CreateArticleDTO(BaseModel):
     description: str | None = Field(..., description="Description of the new article.")
     price: int = Field(..., description="Price of the new article.", example="1")
 
-    def to_document(self, user_id: PydanticObjectId):
-        return Article(author_id=user_id, **self.dict())
+    def to_document(self):
+        return Article(**self.dict())
 
 
 class UpdateArticleDTO(BaseModel):
     name: str = Field(..., description="New name of the article.", example="Book")
     description: str | None = Field(..., description="New description of the article.")
     price: int = Field(..., description="New price of the article.", example="1")
-    approved: bool = Field(False, description="Approved status.")
 
-    def to_document(self, user_id: PydanticObjectId):
-        return Article(author_id=user_id, **self.dict())
+    def to_document(self):
+        return Article(**self.dict())
