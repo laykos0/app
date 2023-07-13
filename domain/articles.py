@@ -36,12 +36,11 @@ class Article(Document):
 
     def update_article(self, user_id: PydanticObjectId, name: str = None, description: str = None,
                        price: int = None, approved: bool = False, deleted: bool = False):
-        self.id = PydanticObjectId(ObjectId())
-        if name is not None:
+        if name:
             self.name = name
-        if description is not None:
+        if description:
             self.description = description
-        if price is not None:
+        if price:
             self.price = price
         self.version.update_version(user_id, approved, deleted)
 

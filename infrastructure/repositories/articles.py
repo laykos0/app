@@ -2,52 +2,26 @@ from domain.articles import Article, ArticleId
 
 
 async def insert(article: Article):
+    article.id = None
     await article.insert()
 
 
 async def find(article_id: ArticleId):
-    pipeline = [
-        {
-            "$match": {
-                "article_id": article_id,
-                "version.approved": True,
-                "version.deleted": False
-            }
-        },
-        {
-            "$sort": {
-                "_id": -1
-            }
-        },
-        {
-            "$limit": 1
-        }
-    ]
-    articles = await Article.aggregate(pipeline).to_list()
-    if articles:
-        return articles[0]
-    else:
-        return None
+    return await Article.find(Article.article_id == article_id,
+                              Article.version.approved == True,
+                              Article.version.deleted == False).sort(-Article.id).first_or_none()
 
 
 async def find_from_all(article_id: ArticleId):
-    article = await Article.find(Article.article_id == article_id).to_list()
-    if article:
-        return article[-1]
-    return None
+    return await Article.find(Article.article_id == article_id,
+                              Article.version.approved == True,
+                              Article.version.deleted == False).to_list()
 
 
 async def find_versions(article_id: ArticleId):
-    pipeline = [
-        {
-            "$match": {
-                "article_id": article_id,
-                "version.approved": True,
-                "version.deleted": False
-            }
-        }
-    ]
-    return await Article.aggregate(pipeline).to_list()
+    return await Article.find(Article.article_id == article_id,
+                              Article.version.approved == True,
+                              Article.version.deleted == False).to_list()
 
 
 async def find_versions_all(article_id: ArticleId):
@@ -55,15 +29,5 @@ async def find_versions_all(article_id: ArticleId):
 
 
 async def find_version(article_id: ArticleId, version: int):
-    pipeline = [
-        {
-            "$match": {
-                "article_id": article_id,
-                "version.number": version
-            }
-        }
-    ]
-    version = await Article.aggregate(pipeline).to_list()
-    if version:
-        return version[0]
-    return None
+    return await Article.find(Article.article_id == article_id,
+                              Article.version.number == version).sort(-Article.id).first_or_none()
