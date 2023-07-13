@@ -1,11 +1,7 @@
-from beanie import PydanticObjectId
-from bson import ObjectId
-
 from domain.articles import Article, ArticleId
 
 
-async def insert(author_id: PydanticObjectId, article: Article):
-    article.version.update_version(author_id)
+async def insert(article: Article):
     await article.insert()
 
 
@@ -71,31 +67,3 @@ async def find_version(article_id: ArticleId, version: int):
     if version:
         return version[0]
     return None
-
-
-async def update(article_id: ArticleId, author_id: PydanticObjectId, update_article: Article):
-    article = await prepare_for_update(article_id)
-    article.name = update_article.name
-    article.description = update_article.description
-    article.price = update_article.price
-    article.version.update_version(author_id, approved=False, deleted=False)
-    await article.insert()
-    return article
-
-
-async def delete(article_id: ArticleId, author_id: PydanticObjectId, deleted: bool):
-    article = await prepare_for_update(article_id)
-    article.version.update_version(author_id, deleted=deleted)
-    await article.insert()
-
-
-async def approve(article_id: ArticleId, author_id: PydanticObjectId, approved: bool):
-    article = await prepare_for_update(article_id)
-    article.version.update_version(author_id, approved=approved)
-    await article.insert()
-
-
-async def prepare_for_update(article_id: ArticleId):
-    article = await find_from_all(article_id)
-    article.id = PydanticObjectId(ObjectId())
-    return article

@@ -2,11 +2,11 @@ from pydantic import BaseSettings, MongoDsn
 
 
 class Settings(BaseSettings):
-    app_name: str = "App"
-    mongodb_url: MongoDsn
+    app_name = "App"
     api_title = "App"
     api_description = "An API for managing an append-only database, which stores articles and their historical " \
                       "versions."
+    mongodb_url: MongoDsn
 
     api_tags = [
         {

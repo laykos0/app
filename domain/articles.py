@@ -1,6 +1,7 @@
 from datetime import datetime
 
 from beanie import Document, PydanticObjectId
+from bson import ObjectId
 from pydantic import Field, BaseModel
 
 ArticleId = str
@@ -14,14 +15,12 @@ class Version(BaseModel):
     approved: bool = Field(False, description="Approved status.")
     number: int = Field(0, description="Version number of the article.")
 
-    def update_version(self, author_id: PydanticObjectId, approved: bool = None, deleted: bool = None):
+    def update_version(self, author_id: PydanticObjectId, approved: bool = False, deleted: bool = False):
         self.author_id = author_id
         self.date_modified = datetime.utcnow()
         self.number += 1
-        if approved is not None:
-            self.approved = approved
-        if deleted is not None:
-            self.deleted = deleted
+        self.approved = approved
+        self.deleted = deleted
 
 
 class Article(Document):
@@ -34,6 +33,17 @@ class Article(Document):
 
     class Settings:
         name = "articles"
+
+    def update_article(self, user_id: PydanticObjectId, name: str = None, description: str = None,
+                       price: int = None, approved: bool = False, deleted: bool = False):
+        self.id = PydanticObjectId(ObjectId())
+        if name is not None:
+            self.name = name
+        if description is not None:
+            self.description = description
+        if price is not None:
+            self.price = price
+        self.version.update_version(user_id, approved, deleted)
 
 
 class CreateArticleDTO(BaseModel):
