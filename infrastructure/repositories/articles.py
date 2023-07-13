@@ -78,7 +78,7 @@ async def update(article_id: ArticleId, author_id: PydanticObjectId, update_arti
     article.name = update_article.name
     article.description = update_article.description
     article.price = update_article.price
-    article.version.update_version(author_id)
+    article.version.update_version(author_id, approved=False, deleted=False)
     await article.insert()
     return article
 
@@ -98,6 +98,4 @@ async def approve(article_id: ArticleId, author_id: PydanticObjectId, approved: 
 async def prepare_for_update(article_id: ArticleId):
     article = await find_from_all(article_id)
     article.id = PydanticObjectId(ObjectId())
-    article.version.deleted = False
-    article.version.approved = False
     return article

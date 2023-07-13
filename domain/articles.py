@@ -23,18 +23,6 @@ class Version(BaseModel):
         if deleted is not None:
             self.deleted = deleted
 
-    def approve_version(self, author_id: PydanticObjectId):
-        self.update_version(author_id, approved=True)
-
-    def disapprove_version(self, author_id: PydanticObjectId):
-        self.update_version(author_id, approved=False)
-
-    def delete_version(self, author_id: PydanticObjectId):
-        self.update_version(author_id, deleted=True)
-
-    def restore_version(self, author_id: PydanticObjectId):
-        self.update_version(author_id, deleted=False)
-
 
 class Article(Document):
     article_id: ArticleId = Field(default_factory=lambda: datetime.utcnow().isoformat(),
