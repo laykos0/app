@@ -47,7 +47,7 @@ async def update_article(article_id: ArticleId = Path(),
     return await put(article_id, user_id, update_article_dto)
 
 
-@router.patch("/{article_id}}",
+@router.patch("/{article_id}",
               description="Approves an article version.",
               )
 async def approve_article(article_id: ArticleId = Path(),

@@ -13,9 +13,7 @@ async def find(article_id: ArticleId):
 
 
 async def find_from_all(article_id: ArticleId):
-    return await Article.find(Article.article_id == article_id,
-                              Article.version.approved == True,
-                              Article.version.deleted == False).to_list()
+    return await Article.find(Article.article_id == article_id).sort(-Article.id).first_or_none()
 
 
 async def find_versions(article_id: ArticleId):
