@@ -8,6 +8,6 @@ from core.settings import settings
 
 
 async def init_db():
-    client = motor.motor_asyncio.AsyncIOMotorClient(settings.mongodb_url)
+    client = motor.motor_asyncio.AsyncIOMotorClient(settings.MONGODB_URL)
 
     await beanie.init_beanie(database=client.db_name, document_models=[User, Article])

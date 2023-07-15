@@ -1,0 +1,20 @@
+version: '3.9'
+services:
+  app:
+    build: .
+    image: app
+    ports:
+      - '8000:8000'
+    environment:
+      MONGODB_URL: mongodb://mongodb:27017
+    depends_on:
+      - mongodb
+  mongodb:
+    image: mongo
+    ports:
+      - '27017:27017'
+    volumes:
+      - mongo_db:/data/db
+
+volumes:
+  mongo_db: {}
