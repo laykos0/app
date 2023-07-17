@@ -3,7 +3,7 @@ from datetime import datetime
 from beanie import Document, PydanticObjectId
 from pydantic import Field, BaseModel
 
-from domain.version import Version
+from src.domain.version import Version
 
 ArticleId = str
 

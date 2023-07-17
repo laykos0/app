@@ -14,6 +14,6 @@ RUN poetry config virtualenvs.create false
 COPY ./pyproject.toml ./poetry.lock ./
 RUN poetry install
 
-COPY ./ ./
+COPY ./src/ ./src/
 
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["uvicorn", "src.main:app", "--host", "0.0.0.0", "--port", "8000"]

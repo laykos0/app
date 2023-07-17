@@ -1,8 +1,8 @@
 from beanie import PydanticObjectId
 from fastapi import APIRouter, Query, Body, Path
 
-from domain.articles import ArticleId, Article, CreateArticleDTO, UpdateArticleDTO
-from infrastructure.services.articles import post, get, get_versions, get_version, put, remove, confirm
+from src.domain.articles import ArticleId, Article, CreateArticleDTO, UpdateArticleDTO
+from src.infrastructure.services.articles import post, get, get_versions, get_version, put, remove, confirm
 
 router = APIRouter()
 

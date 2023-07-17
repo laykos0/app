@@ -1,8 +1,8 @@
 from beanie import PydanticObjectId
 from fastapi import APIRouter, Path, Body
 
-from domain.users import User, CreateUserDTO, UpdateUserDTO
-from infrastructure.services.users import find_all, insert, find, update, remove
+from src.domain.users import User, CreateUserDTO, UpdateUserDTO
+from src.infrastructure.services.users import find_all, insert, find, update, remove
 
 router = APIRouter()
 

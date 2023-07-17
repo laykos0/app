@@ -1,6 +1,6 @@
 from beanie import PydanticObjectId
 
-from domain.articles import ArticleId
+from src.domain.articles import ArticleId
 
 
 class CustomException(Exception):

@@ -1,7 +1,6 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter
 
-from api.routers import users, articles
-from core.dependencies import get_token_header
+from src.api.routers import articles, users
 
 router = APIRouter()
 
@@ -14,5 +13,4 @@ router.include_router(users.router,
 router.include_router(articles.router,
                       prefix="/articles",
                       tags=["articles"],
-                      dependencies=[Depends(get_token_header)],
                       )

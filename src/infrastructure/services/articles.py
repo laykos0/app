@@ -1,8 +1,8 @@
 from beanie import PydanticObjectId
 
-from domain.articles import CreateArticleDTO, ArticleId, UpdateArticleDTO
-from infrastructure.exceptions import ArticleNotFoundException, VersionNotFoundException
-from infrastructure.repositories.articles import insert, find, find_versions, find_version, find_versions_all, \
+from src.domain.articles import CreateArticleDTO, ArticleId, UpdateArticleDTO
+from src.infrastructure.exceptions import ArticleNotFoundException, VersionNotFoundException
+from src.infrastructure.repositories.articles import insert, find, find_versions, find_version, find_versions_all, \
     find_from_all
 
 

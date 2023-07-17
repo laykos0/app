@@ -2,7 +2,7 @@ from starlette import status
 from starlette.requests import Request
 from starlette.responses import JSONResponse
 
-from infrastructure.exceptions import CustomException
+from src.infrastructure.exceptions import CustomException
 
 
 async def handle_404_not_found(request: Request, exc: CustomException):

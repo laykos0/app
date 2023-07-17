@@ -2,9 +2,9 @@ import beanie
 import motor
 import motor.motor_asyncio
 
-from domain.articles import Article
-from domain.users import User
-from core.settings import settings
+from src.domain.articles import Article
+from src.domain.users import User
+from src.core.settings import settings
 
 
 async def init_db():

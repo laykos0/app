@@ -2,6 +2,7 @@ from datetime import datetime
 
 from beanie import PydanticObjectId
 from pydantic import BaseModel, Field
+from pydantic.class_validators import validator
 
 
 class Version(BaseModel):
@@ -18,3 +19,15 @@ class Version(BaseModel):
         self.number += 1
         self.approved = approved
         self.deleted = deleted
+
+    @validator('date_modified', pre=True, always=True)
+    def validate_datetime(cls, v):
+        if isinstance(v, datetime):
+            return v
+        elif isinstance(v, str):
+            try:
+                return datetime.fromisoformat(v)
+            except ValueError:
+                raise ValueError("Invalid format")
+        else:
+            raise ValueError("Invalid format")

@@ -1,8 +1,8 @@
 from beanie import PydanticObjectId
 
-from domain.users import CreateUserDTO, UpdateUserDTO
-from infrastructure.exceptions import UserNotFoundException
-from infrastructure.repositories.users import post, get, get_all, put, delete
+from src.domain.users import CreateUserDTO, UpdateUserDTO
+from src.infrastructure.exceptions import UserNotFoundException
+from src.infrastructure.repositories.users import post, get, get_all, put, delete
 
 # TODO: Maybe invert naming
 
