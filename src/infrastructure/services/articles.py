@@ -1,13 +1,13 @@
 from beanie import PydanticObjectId
 
-from src.domain.articles import CreateArticleDTO, ArticleId, UpdateArticleDTO
+from src.domain.articles import ArticleCreateDTO, ArticleId, ArticleUpdateDTO
 from src.infrastructure.exceptions import ArticleNotFoundException, VersionNotFoundException
 from src.infrastructure.repositories.articles import insert, find, find_versions, find_version, find_versions_all, \
     find_from_all
 
 
-async def post(author_id: PydanticObjectId, create_article_dto: CreateArticleDTO):
-    article = create_article_dto.to_document()
+async def post(author_id: PydanticObjectId, article_create_dto: ArticleCreateDTO):
+    article = article_create_dto.to_document()
     article.version.new(author_id)
     await insert(article)
 
@@ -38,9 +38,9 @@ async def get_version(article_id: ArticleId, version: int):
     raise VersionNotFoundException(article_id, version)
 
 
-async def put(article_id: ArticleId, user_id: PydanticObjectId, update_article_dto: UpdateArticleDTO):
+async def put(article_id: ArticleId, user_id: PydanticObjectId, article_update_dto: ArticleUpdateDTO):
     article = await get(article_id, True)
-    article_update = update_article_dto.to_document()
+    article_update = article_update_dto.to_document()
     article.patch(user_id, name=article_update.name, description=article_update.description,
                   price=article_update.price)
     await insert(article)

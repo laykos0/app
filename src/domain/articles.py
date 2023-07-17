@@ -30,7 +30,7 @@ class Article(Document):
         self.version.new(user_id, approved, deleted)
 
 
-class CreateArticleDTO(BaseModel):
+class ArticleCreateDTO(BaseModel):
     name: str = Field(..., description="Name of the new article.", example="Book")
     description: str | None = Field(..., description="Description of the new article.")
     price: int = Field(..., description="Price of the new article.", example="1")
@@ -39,7 +39,7 @@ class CreateArticleDTO(BaseModel):
         return Article(**self.dict())
 
 
-class UpdateArticleDTO(BaseModel):
+class ArticleUpdateDTO(BaseModel):
     name: str = Field(..., description="New name of the article.", example="Book")
     description: str | None = Field(..., description="New description of the article.")
     price: int = Field(..., description="New price of the article.", example="1")

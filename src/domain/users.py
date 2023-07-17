@@ -11,23 +11,27 @@ class Role(str, Enum):
 
 class User(Document):
     name: str = Field(..., description="Name of the user.", example="name")
-    roles: list[Role] = Field(..., description="Roles of the user.", example=["user"])
+    role: Role = Field(..., description="Role of the user.", example="user")
 
     class Settings:
         name = "users"
 
+    def patch(self, name: str, role: Role):
+        self.name = name
+        self.role = role
 
-class CreateUserDTO(BaseModel):
+
+class UserCreateDTO(BaseModel):
     name: str = Field(..., description="Name of the new user.", example="name")
-    roles: list[str] = Field(..., description="Roles of the new user.", example=["user"])
+    role: Role = Field(..., description="Role of the new user.", example="user")
 
     def to_document(self):
         return User(**self.dict())
 
 
-class UpdateUserDTO(BaseModel):
+class UserUpdateDTO(BaseModel):
     name: str = Field(..., description="New name of the new user.", example="new_name")
-    roles: list[str] = Field(..., description="New role of the new user.", example=["admin"])
+    role: Role = Field(..., description="New role of the new user.", example="admin")
 
     def to_document(self):
         return User(**self.dict())

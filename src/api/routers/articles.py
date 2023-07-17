@@ -1,7 +1,7 @@
 from beanie import PydanticObjectId
 from fastapi import APIRouter, Query, Body, Path
 
-from src.domain.articles import ArticleId, Article, CreateArticleDTO, UpdateArticleDTO
+from src.domain.articles import ArticleId, Article, ArticleCreateDTO, ArticleUpdateDTO
 from src.infrastructure.services.articles import post, get, get_versions, get_version, put, remove, confirm
 
 router = APIRouter()
@@ -11,8 +11,8 @@ router = APIRouter()
              description="Creates a new article.",
              )
 async def create_article(author_id: PydanticObjectId = Query(example="64ac6904e80399a368013184"),
-                         create_article_dto: CreateArticleDTO = Body()):
-    await post(author_id, create_article_dto)
+                         article_create_dto: ArticleCreateDTO = Body()):
+    await post(author_id, article_create_dto)
 
 
 @router.get("/{article_id}",
@@ -43,8 +43,8 @@ async def get_article_version(article_id: ArticleId = Path(), version: int = Pat
             )
 async def update_article(article_id: ArticleId = Path(),
                          user_id: PydanticObjectId = Body(example="64ac6904e80399a368013184"),
-                         update_article_dto: UpdateArticleDTO = Body()):
-    return await put(article_id, user_id, update_article_dto)
+                         article_update_dto: ArticleUpdateDTO = Body()):
+    return await put(article_id, user_id, article_update_dto)
 
 
 @router.patch("/{article_id}",

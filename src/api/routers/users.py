@@ -1,8 +1,8 @@
 from beanie import PydanticObjectId
 from fastapi import APIRouter, Path, Body
 
-from src.domain.users import User, CreateUserDTO, UpdateUserDTO
-from src.infrastructure.services.users import find_all, insert, find, update, remove
+from src.domain.users import User, UserCreateDTO, UserUpdateDTO
+from src.infrastructure.services.users import post, get, get_all, put, remove
 
 router = APIRouter()
 
@@ -10,8 +10,8 @@ router = APIRouter()
 @router.post("",
              description="Creates a new user."
              )
-async def create_user(create_user_dto: CreateUserDTO = Body()):
-    await insert(create_user_dto)
+async def create_user(user_create_dto: UserCreateDTO = Body()):
+    await post(user_create_dto)
 
 
 @router.get("/{user_id}",
@@ -19,7 +19,7 @@ async def create_user(create_user_dto: CreateUserDTO = Body()):
             response_model=User
             )
 async def get_user(user_id: PydanticObjectId = Path()):
-    return await find(user_id)
+    return await get(user_id)
 
 
 @router.get("",
@@ -27,15 +27,14 @@ async def get_user(user_id: PydanticObjectId = Path()):
             response_model=list[User]
             )
 async def get_all_users():
-    return await find_all()
+    return await get_all()
 
 
-@router.put(
-    "/{user_id}",
-    description="Updates an user.",
-)
-async def update_user(user_id: PydanticObjectId = Path(), update_user_dto: UpdateUserDTO = Body()):
-    await update(user_id, update_user_dto)
+@router.put("/{user_id}",
+            description="Updates an user.",
+            )
+async def update_user(user_id: PydanticObjectId = Path(), user_update_dto: UserUpdateDTO = Body()):
+    await put(user_id, user_update_dto)
 
 
 @router.delete("/{user_id}",
