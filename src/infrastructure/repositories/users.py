@@ -1,23 +1,23 @@
 from beanie import PydanticObjectId
 
-from src.domain.users import User
+from src.domain.users import UserInDB
 
 
-async def insert(user: User):
+async def insert(user: UserInDB):
     return await user.insert()
 
 
 async def find(user_id: PydanticObjectId):
-    return await User.get(user_id)
+    return await UserInDB.get(user_id)
 
 
 async def find_all():
-    return await User.find_all().to_list()
+    return await UserInDB.find_all().to_list()
 
 
-async def update(user: User):
+async def update(user: UserInDB):
     return await user.save()
 
 
-async def delete(user: User):
+async def delete(user: UserInDB):
     await user.delete()

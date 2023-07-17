@@ -21,6 +21,13 @@ class User(Document):
         self.role = role
 
 
+class UserInDB(User):
+    hashed_password: str
+
+    def to_user(self):
+        return User(**self.dict())
+
+
 class UserCreateDTO(BaseModel):
     name: str = Field(..., description="Name of the new user.", example="name")
     role: Role = Field(..., description="Role of the new user.", example="user")

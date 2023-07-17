@@ -10,8 +10,8 @@ router = APIRouter()
 @router.post("",
              description="Creates a new user."
              )
-async def create_user(user_create_dto: UserCreateDTO = Body()):
-    await post(user_create_dto)
+async def create_user(user_create_dto: UserCreateDTO = Body(), password: str = Body()):
+    await post(user_create_dto, password)
 
 
 @router.get("/{user_id}",
