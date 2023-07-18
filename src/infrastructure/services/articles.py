@@ -1,9 +1,22 @@
 from beanie import PydanticObjectId
 
-from src.domain.articles import ArticleCreateDTO, ArticleId, ArticleUpdateDTO
-from src.infrastructure.exceptions import ArticleNotFoundException, VersionNotFoundException
-from src.infrastructure.repositories.articles import insert, find, find_versions, find_version, find_versions_all, \
+from src.domain.articles import (
+    ArticleCreateDTO,
+    ArticleId,
+    ArticleUpdateDTO
+)
+from src.infrastructure.exceptions import (
+    ArticleNotFoundException,
+    VersionNotFoundException
+)
+from src.infrastructure.repositories.articles import (
+    insert,
+    find,
+    find_versions,
+    find_version,
+    find_versions_all,
     find_from_all
+)
 
 
 async def post(author_id: PydanticObjectId, article_create_dto: ArticleCreateDTO):

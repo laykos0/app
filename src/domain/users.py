@@ -1,6 +1,6 @@
 from enum import Enum
 
-from beanie import Document
+from beanie import Document, Indexed
 from pydantic import Field, BaseModel
 
 
@@ -9,9 +9,16 @@ class Role(str, Enum):
     admin = "admin"
 
 
-class User(Document):
+# TODO: Osobny model dla mongo
+class User(BaseModel):
     name: str = Field(..., description="Name of the user.", example="name")
     role: Role = Field(..., description="Role of the user.", example="user")
+
+
+class UserInDB(Document):
+    name: Indexed(str, unique=True)
+    role: Role = Field(..., description="Role of the user.", example="user")
+    hashed_password: str
 
     class Settings:
         name = "users"
@@ -20,10 +27,6 @@ class User(Document):
         self.name = name
         self.role = role
 
-
-class UserInDB(User):
-    hashed_password: str
-
     def to_user(self):
         return User(**self.dict())
 
@@ -31,9 +34,10 @@ class UserInDB(User):
 class UserCreateDTO(BaseModel):
     name: str = Field(..., description="Name of the new user.", example="name")
     role: Role = Field(..., description="Role of the new user.", example="user")
+    password: str
 
     def to_document(self):
-        return User(**self.dict())
+        return UserInDB(**self.dict())
 
 
 class UserUpdateDTO(BaseModel):

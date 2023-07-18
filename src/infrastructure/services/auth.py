@@ -10,8 +10,11 @@ from passlib.context import CryptContext
 from pydantic import BaseModel
 
 from src.core.settings import settings
-from src.domain.users import User
-from src.infrastructure.exceptions import InvalidCredentialsException, InsufficientPermissionException
+from src.domain.users import UserInDB
+from src.infrastructure.exceptions import (
+    InvalidCredentialsException,
+    InsufficientPermissionException
+)
 from src.infrastructure.repositories.users import find
 
 
@@ -79,17 +82,5 @@ async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)]):
     return user
 
 
-async def get_current_user_admin_status(current_user: Annotated[User, Depends(get_current_user)]):
-    if current_user.role == "admin":
-        return True
-    raise InsufficientPermissionException(current_user.id, "admin")
-
-
-async def get_current_user_permission(current_user: Annotated[User, Depends(get_current_user)]):
-    if current_user.role == "admin":
-        return True
-    return False
-
-
-async def get_current_user_id(current_user: Annotated[User, Depends(get_current_user)]):
+async def get_current_user_id(current_user: Annotated[UserInDB, Depends(get_current_user)]):
     return current_user.id

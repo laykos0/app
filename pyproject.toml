@@ -8,7 +8,7 @@ readme = "README.md"
 [tool.poetry.dependencies]
 python = "^3.10"
 fastapi = "^0.100.0"
-uvicorn = "^0.22.0"
+uvicorn = "^0.23.1"
 beanie = "^1.20.0"
 motor = "^3.2.0"
 pydantic = {version = "1.10.0", extras = ["dotenv"]}

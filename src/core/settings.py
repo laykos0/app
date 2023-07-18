@@ -2,12 +2,12 @@ from pydantic import BaseSettings, MongoDsn
 
 
 class Settings(BaseSettings):
-    app_name = "App"
-    api_title = "App"
-    api_description = "An API for managing an append-only database, which stores articles and their historical " \
+    APP_NAME = "App"
+    API_TITLE = "App"
+    API_DESCRIPTION = "An API for managing an append-only database, which stores articles and their historical " \
                       "versions."
 
-    api_tags = [
+    API_TAGS = [
         {
             "name": "articles",
             "description": "Endpoints related to articles"
@@ -20,11 +20,13 @@ class Settings(BaseSettings):
 
     MONGODB_URL: MongoDsn
 
+    # TODO: SHOULD BELOW BE IN SETTINGS?
+
     SECRET_KEY = "09d25e094faa6ca2556c818166b7a9563b93f7099f6f0f4caa6cf63b88e8d3e7"
     ALGORITHM = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
-    origins = [
+    ORIGINS = [
         "http://localhost:8000",
     ]
 

@@ -1,8 +1,21 @@
-from beanie import PydanticObjectId
-from fastapi import APIRouter, Path, Body
+from typing import Annotated
 
-from src.domain.users import User, UserCreateDTO, UserUpdateDTO
-from src.infrastructure.services.users import post, get, get_all, put, remove
+from beanie import PydanticObjectId
+from fastapi import APIRouter, Path, Body, Depends
+
+from src.domain.users import (
+    User,
+    UserCreateDTO,
+    UserUpdateDTO
+)
+from src.infrastructure.services.auth import get_current_user
+from src.infrastructure.services.users import (
+    post,
+    get,
+    get_all,
+    put,
+    remove
+)
 
 router = APIRouter()
 
@@ -10,8 +23,13 @@ router = APIRouter()
 @router.post("",
              description="Creates a new user."
              )
-async def create_user(user_create_dto: UserCreateDTO = Body(), password: str = Body()):
-    await post(user_create_dto, password)
+async def create_user(user_create_dto: UserCreateDTO = Body()):
+    await post(user_create_dto)
+
+
+@router.get("/me")
+async def read_users_me(current_user: Annotated[User, Depends(get_current_user)]):
+    return current_user
 
 
 @router.get("/{user_id}",
