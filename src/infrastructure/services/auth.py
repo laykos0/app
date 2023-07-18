@@ -7,24 +7,14 @@ from fastapi import Depends
 from fastapi.security import OAuth2PasswordBearer
 from jose import JWTError, jwt
 from passlib.context import CryptContext
-from pydantic import BaseModel
 
 from src.core.settings import settings
+from src.domain.token import TokenData
 from src.domain.users import UserInDB
 from src.infrastructure.exceptions import (
     InvalidCredentialsException
 )
 from src.infrastructure.repositories.users import find
-
-
-class Token(BaseModel):
-    access_token: str
-    token_type: str
-
-
-class TokenData(BaseModel):
-    username: str | None = None
-
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")

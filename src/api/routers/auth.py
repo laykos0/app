@@ -9,9 +9,9 @@ from src.core.settings import settings
 from src.infrastructure.exceptions import InvalidCredentialsException
 from src.infrastructure.services.auth import (
     authenticate_user,
-    Token,
     create_access_token
 )
+from src.domain.token import Token
 
 router = APIRouter()
 
