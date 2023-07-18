@@ -9,8 +9,7 @@ from src.domain.users import (
 )
 from src.infrastructure.exceptions import (
     ArticleNotFoundException,
-    VersionNotFoundException,
-    InsufficientPermissionException
+    VersionNotFoundException
 )
 from src.infrastructure.repositories.articles import (
     insert,
@@ -21,10 +20,10 @@ from src.infrastructure.repositories.articles import (
     find_versions,
     find_versions_all,
 )
+from src.infrastructure.services.auth import is_admin
 
 
 async def post(user: UserInDB, article_create_dto: ArticleCreateDTO):
-    is_admin(user)
     article = article_create_dto.to_document()
     article.version.new(user.id)
     return await insert(article)
@@ -61,7 +60,6 @@ async def get_version(user: UserInDB, article_id: ArticleId, version_number: int
 
 
 async def put(user: UserInDB, article_id: ArticleId, article_update_dto: ArticleUpdateDTO):
-    is_admin(user)
     article = await get(user, article_id)
     article_update = article_update_dto.to_document()
     article.patch(user.id, name=article_update.name, description=article_update.description,
@@ -70,19 +68,13 @@ async def put(user: UserInDB, article_id: ArticleId, article_update_dto: Article
 
 
 async def confirm(user: UserInDB, article_id: ArticleId, approved: bool = True):
-    is_admin(user)
     article = await get(user, article_id)
     article.patch(user.id, approved=approved)
     return await insert(article)
 
 
 async def remove(user: UserInDB, article_id: ArticleId, deleted: bool = True):
-    is_admin(user)
     article = await get(user, article_id)
     article.patch(user.id, deleted=deleted)
     return await insert(article)
 
-
-def is_admin(user: UserInDB):
-    if user.role != Role.admin:
-        raise InsufficientPermissionException(user.id, user.role)

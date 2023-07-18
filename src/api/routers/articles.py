@@ -19,7 +19,7 @@ from src.infrastructure.services.articles import (
     confirm
 )
 from src.infrastructure.services.auth import (
-    get_current_user
+    get_current_user, is_admin
 )
 
 router = APIRouter()
@@ -27,6 +27,7 @@ router = APIRouter()
 
 @router.post("",
              description="Creates a new article.",
+             dependencies=[Depends(is_admin)]
              )
 async def create_article(user: Annotated[UserInDB, Depends(get_current_user)],
                          article_create_dto: ArticleCreateDTO = Body()):
@@ -62,6 +63,7 @@ async def get_article_version(user: Annotated[UserInDB, Depends(get_current_user
 
 @router.put("/{article_id}",
             description="Updates an article and stores its historical version.",
+            dependencies=[Depends(is_admin)]
             )
 async def update_article(user: Annotated[UserInDB, Depends(get_current_user)],
                          article_id: ArticleId = Path(),
@@ -71,6 +73,7 @@ async def update_article(user: Annotated[UserInDB, Depends(get_current_user)],
 
 @router.patch("/{article_id}",
               description="Approves an article version.",
+              dependencies=[Depends(is_admin)]
               )
 async def approve_article(user: Annotated[UserInDB, Depends(get_current_user)],
                           article_id: ArticleId = Path(),
@@ -80,6 +83,7 @@ async def approve_article(user: Annotated[UserInDB, Depends(get_current_user)],
 
 @router.delete("/{article_id}",
                description="Soft deletes an article version.",
+               dependencies=[Depends(is_admin)]
                )
 async def delete_article(user: Annotated[UserInDB, Depends(get_current_user)],
                          article_id: ArticleId = Path(),

@@ -10,9 +10,9 @@ from passlib.context import CryptContext
 
 from src.core.settings import settings
 from src.domain.token import TokenData
-from src.domain.users import UserInDB
+from src.domain.users import UserInDB, Role
 from src.infrastructure.exceptions import (
-    InvalidCredentialsException
+    InvalidCredentialsException, InsufficientPermissionException
 )
 from src.infrastructure.repositories.users import find
 
@@ -73,3 +73,8 @@ async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)]):
 
 async def get_current_user_id(current_user: Annotated[UserInDB, Depends(get_current_user)]):
     return current_user.id
+
+
+async def is_admin(current_user: Annotated[UserInDB, Depends(get_current_user)]):
+    if current_user.role != Role.admin:
+        raise InsufficientPermissionException(current_user.id, Role.admin)
