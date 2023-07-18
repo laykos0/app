@@ -3,7 +3,7 @@ from src.domain.articles import Article, ArticleId
 
 async def insert(article: Article):
     article.id = None
-    await article.insert()
+    return await article.insert()
 
 
 async def find(article_id: ArticleId):

@@ -17,7 +17,7 @@ router = APIRouter()
              )
 async def create_article(user_id: Annotated[PydanticObjectId, Depends(get_current_user_id)],
                          article_create_dto: ArticleCreateDTO = Body()):
-    await post(user_id, article_create_dto)
+    return await post(user_id, article_create_dto)
 
 
 @router.get("/{article_id}",
@@ -72,4 +72,4 @@ async def approve_article(user_id: Annotated[PydanticObjectId, Depends(get_curre
 async def delete_article(user_id: Annotated[PydanticObjectId, Depends(get_current_user_id)],
                          article_id: ArticleId = Path(),
                          deleted: bool = Query(default=True)):
-    await remove(article_id, user_id, deleted)
+    return await remove(article_id, user_id, deleted)

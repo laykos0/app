@@ -9,7 +9,7 @@ from src.infrastructure.repositories.articles import insert, find, find_versions
 async def post(author_id: PydanticObjectId, article_create_dto: ArticleCreateDTO):
     article = article_create_dto.to_document()
     article.version.new(author_id)
-    await insert(article)
+    return await insert(article)
 
 
 async def get(article_id: ArticleId, all_articles: bool):
@@ -43,16 +43,16 @@ async def put(article_id: ArticleId, user_id: PydanticObjectId, article_update_d
     article_update = article_update_dto.to_document()
     article.patch(user_id, name=article_update.name, description=article_update.description,
                   price=article_update.price)
-    await insert(article)
+    return await insert(article)
 
 
 async def confirm(article_id: ArticleId, user_id: PydanticObjectId, approved: bool = True):
     article = await get(article_id, True)
     article.patch(user_id, approved=approved)
-    await insert(article)
+    return await insert(article)
 
 
 async def remove(article_id: ArticleId, user_id: PydanticObjectId, deleted: bool = True):
     article = await get(article_id, True)
     article.patch(user_id, deleted=deleted)
-    await insert(article)
+    return await insert(article)
