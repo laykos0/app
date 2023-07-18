@@ -17,7 +17,7 @@ router = APIRouter()
              )
 async def create_article(user_id: Annotated[PydanticObjectId, Depends(get_current_user_id)],
                          article_create_dto: ArticleCreateDTO = Body()):
-    await post(PydanticObjectId(user_id), article_create_dto)
+    await post(user_id, article_create_dto)
 
 
 @router.get("/{article_id}",
@@ -52,7 +52,7 @@ async def get_article_version(article_id: ArticleId = Path(), version: int = Pat
 async def update_article(user_id: Annotated[PydanticObjectId, Depends(get_current_user_id)],
                          article_id: ArticleId = Path(),
                          article_update_dto: ArticleUpdateDTO = Body()):
-    return await put(article_id, PydanticObjectId(user_id), article_update_dto)
+    return await put(article_id, user_id, article_update_dto)
 
 
 @router.patch("/{article_id}",
@@ -62,7 +62,7 @@ async def update_article(user_id: Annotated[PydanticObjectId, Depends(get_curren
 async def approve_article(user_id: Annotated[PydanticObjectId, Depends(get_current_user_id)],
                           article_id: ArticleId = Path(),
                           approved: bool = Query(default=True)):
-    return await confirm(article_id, PydanticObjectId(user_id), approved)
+    return await confirm(article_id, user_id, approved)
 
 
 @router.delete("/{article_id}",
@@ -72,4 +72,4 @@ async def approve_article(user_id: Annotated[PydanticObjectId, Depends(get_curre
 async def delete_article(user_id: Annotated[PydanticObjectId, Depends(get_current_user_id)],
                          article_id: ArticleId = Path(),
                          deleted: bool = Query(default=True)):
-    await remove(article_id, PydanticObjectId(user_id), deleted)
+    await remove(article_id, user_id, deleted)
