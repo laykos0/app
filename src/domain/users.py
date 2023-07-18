@@ -9,7 +9,6 @@ class Role(str, Enum):
     admin = "admin"
 
 
-# TODO: Osobny model dla mongo
 class User(BaseModel):
     name: str = Field(..., description="Name of the user.", example="name")
     role: Role = Field(..., description="Role of the user.", example="user")

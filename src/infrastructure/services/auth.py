@@ -12,8 +12,7 @@ from pydantic import BaseModel
 from src.core.settings import settings
 from src.domain.users import UserInDB
 from src.infrastructure.exceptions import (
-    InvalidCredentialsException,
-    InsufficientPermissionException
+    InvalidCredentialsException
 )
 from src.infrastructure.repositories.users import find
 

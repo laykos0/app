@@ -28,4 +28,10 @@ async def find_versions_all(article_id: ArticleId):
 
 async def find_version(article_id: ArticleId, version: int):
     return await Article.find(Article.article_id == article_id,
+                              Article.version.number == version,
+                              Article.version.approved == True).sort(-Article.id).first_or_none()
+
+
+async def find_version_all(article_id: ArticleId, version: int):
+    return await Article.find(Article.article_id == article_id,
                               Article.version.number == version).sort(-Article.id).first_or_none()
