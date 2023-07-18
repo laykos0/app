@@ -11,8 +11,7 @@ class CustomException(Exception):
 
 
 class CustomNotFoundException(CustomException):
-    def __init__(self, error_type: str, message: str):
-        super().__init__(error_type, message)
+    pass
 
 
 class UserNotFoundException(CustomNotFoundException):
@@ -28,3 +27,21 @@ class ArticleNotFoundException(CustomNotFoundException):
 class VersionNotFoundException(CustomNotFoundException):
     def __init__(self, article_id: ArticleId, version: int):
         super().__init__('article-version-not-found', f'Article {article_id}, version {version} not found.')
+
+
+class CustomUnauthorizedException(CustomException):
+    pass
+
+
+class InvalidCredentialsException(CustomUnauthorizedException):
+    def __init__(self):
+        super().__init__('invalid-credentials', 'Could not validate credentials.')
+
+
+class CustomForbiddenException(CustomException):
+    pass
+
+
+class InsufficientPermissionException(CustomForbiddenException):
+    def __init__(self, user_id: PydanticObjectId, role: str):
+        super().__init__('insufficient-permission', f'User {user_id} does not have {role} permission.')

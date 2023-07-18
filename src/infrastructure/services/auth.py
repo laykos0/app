@@ -2,7 +2,7 @@ from datetime import timedelta, datetime
 from typing import Annotated
 
 from beanie import PydanticObjectId
-from fastapi import Depends, HTTPException, status
+from fastapi import Depends
 from fastapi.security import OAuth2PasswordBearer
 from jose import JWTError, jwt
 from passlib.context import CryptContext
@@ -10,6 +10,7 @@ from pydantic import BaseModel
 
 from src.core.settings import settings
 from src.domain.users import User
+from src.infrastructure.exceptions import InvalidCredentialsException, InsufficientPermissionException
 from src.infrastructure.repositories.users import find
 
 
@@ -44,7 +45,6 @@ async def authenticate_user(username: str, password: str):
     if not user:
         return False
     if not verify_password(password, user.hashed_password):
-        print(get_password_hash(password))
         return False
     return user
 
@@ -61,32 +61,24 @@ def create_access_token(data: dict, expires_delta: timedelta | None = None):
 
 
 async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)]):
-    credentials_exception = HTTPException(
-        status_code=status.HTTP_401_UNAUTHORIZED,
-        detail="Could not validate credentials",
-        headers={"WWW-Authenticate": "Bearer"},
-    )
     try:
         payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM])
         username: str = payload.get("sub")
         if username is None:
-            raise credentials_exception
+            raise InvalidCredentialsException
         token_data = TokenData(username=username)
     except JWTError:
-        raise credentials_exception
+        raise InvalidCredentialsException
     user = await get_user(username=token_data.username)
     if user is None:
-        raise credentials_exception
+        raise InvalidCredentialsException
     return user
 
 
 async def get_current_user_admin_status(current_user: Annotated[User, Depends(get_current_user)]):
     if current_user.role == "admin":
         return True
-    raise HTTPException(
-        status_code=status.HTTP_403_FORBIDDEN,
-        detail="User does not have admin privileges.",
-    )
+    raise InsufficientPermissionException(current_user.id, "admin")
 
 
 async def get_current_user_permission(current_user: Annotated[User, Depends(get_current_user)]):
