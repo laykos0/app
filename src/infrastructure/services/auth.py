@@ -2,6 +2,7 @@ from datetime import timedelta, datetime
 from typing import Annotated
 
 from beanie import PydanticObjectId
+from bson.errors import InvalidId
 from fastapi import Depends
 from fastapi.security import OAuth2PasswordBearer
 from jose import JWTError, jwt
@@ -36,8 +37,11 @@ def get_password_hash(password):
 
 
 async def get_user(username: str):
-    if user := await find(PydanticObjectId(username)):
-        return user
+    try:
+        if user := await find(PydanticObjectId(username)):
+            return user
+    except InvalidId:
+        return None
 
 
 async def authenticate_user(username: str, password: str):
