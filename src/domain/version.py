@@ -24,12 +24,12 @@ class Version(BaseModel):
     def validate_datetime(cls, v):
         if isinstance(v, datetime):
             return v
-        elif isinstance(v, date):
+        if isinstance(v, date):
             try:
                 return datetime(v.year, v.month, v.day)
             except ValueError:
                 raise ValueError("Invalid format")
-        elif isinstance(v, str):
+        if isinstance(v, str):
             try:
                 return datetime.fromisoformat(v)
             except ValueError:
