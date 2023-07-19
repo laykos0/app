@@ -33,16 +33,14 @@ async def get_user(username: str):
         if user := await find(PydanticObjectId(username)):
             return user
     except InvalidId:
-        return None
+        raise InvalidCredentialsException
 
 
 async def authenticate_user(username: str, password: str):
     user = await get_user(username)
-    if not user:
-        return False
-    if not verify_password(password, user.hashed_password):
-        return False
-    return user
+    if verify_password(password, user.hashed_password):
+        return user
+    raise InvalidCredentialsException
 
 
 def create_access_token(data: dict, expires_delta: timedelta | None = None):
@@ -66,8 +64,6 @@ async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)]):
     except JWTError:
         raise InvalidCredentialsException
     user = await get_user(username=token_data.username)
-    if user is None:
-        raise InvalidCredentialsException
     return user
 
 
