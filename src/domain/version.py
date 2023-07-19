@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import date, datetime
 
 from beanie import PydanticObjectId
 from pydantic import BaseModel, Field
@@ -24,6 +24,11 @@ class Version(BaseModel):
     def validate_datetime(cls, v):
         if isinstance(v, datetime):
             return v
+        elif isinstance(v, date):
+            try:
+                return datetime(v.year, v.month, v.day)
+            except ValueError:
+                raise ValueError("Invalid format")
         elif isinstance(v, str):
             try:
                 return datetime.fromisoformat(v)
