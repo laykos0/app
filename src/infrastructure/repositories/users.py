@@ -4,6 +4,7 @@ from src.domain.users import UserInDB
 
 
 async def insert(user: UserInDB):
+    user.id = None
     return await user.insert()
 
 

@@ -167,13 +167,13 @@ pycparser = "*"
 
 [[package]]
 name = "click"
-version = "8.1.5"
+version = "8.1.6"
 description = "Composable command line interface toolkit"
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "click-8.1.5-py3-none-any.whl", hash = "sha256:e576aa487d679441d7d30abb87e1b43d24fc53bffb8758443b1a9e1cee504548"},
-    {file = "click-8.1.5.tar.gz", hash = "sha256:4be4b1af8d665c6d942909916d31a213a106800c47d0eeba73d34da3cbc11367"},
+    {file = "click-8.1.6-py3-none-any.whl", hash = "sha256:fa244bb30b3b5ee2cae3da8f55c9e5e0c0e86093306301fb418eb9dc40fbded5"},
+    {file = "click-8.1.6.tar.gz", hash = "sha256:48ee849951919527a045bfe3bf7baa8a959c423134e1a5b98c05c20ba75a1cbd"},
 ]
 
 [package.dependencies]
@@ -234,6 +234,20 @@ sdist = ["build"]
 ssh = ["bcrypt (>=3.1.5)"]
 test = ["pretend", "pytest (>=6.2.0)", "pytest-benchmark", "pytest-cov", "pytest-xdist"]
 test-randomorder = ["pytest-randomly"]
+
+[[package]]
+name = "dataclass-mapper"
+version = "1.8.0"
+description = "Autogenerate mappings between dataclasses"
+optional = false
+python-versions = ">=3.8,<4.0"
+files = [
+    {file = "dataclass_mapper-1.8.0-py3-none-any.whl", hash = "sha256:8459b07046e94b83fd37460af055af0e5d21c5a1fdd4a2180c2ec8accd9bf37e"},
+    {file = "dataclass_mapper-1.8.0.tar.gz", hash = "sha256:9906bac4ae92330a70732735d4d9313a92559c68b002109f6885cd1af2d43da4"},
+]
+
+[package.extras]
+pydantic = ["pydantic (>=1.9.0)"]
 
 [[package]]
 name = "dnspython"
@@ -795,4 +809,4 @@ standard = ["colorama (>=0.4)", "httptools (>=0.5.0)", "python-dotenv (>=0.13)",
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "e5d879261cd6c46bfbf8a577054b9631834dc52aef4eb239df00927a4e2aa7e1"
+content-hash = "ced680d3f5974dfb623a75bfac01731228703fca987e84cb152c49e87905b867"

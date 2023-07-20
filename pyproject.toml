@@ -15,6 +15,7 @@ pydantic = {version = "1.10.0", extras = ["dotenv"]}
 python-jose = {extras = ["cryptography"], version = "^3.3.0"}
 passlib = {extras = ["bcrypt"], version = "^1.7.4"}
 python-multipart = "^0.0.6"
+dataclass-mapper = "^1.8.0"
 
 
 [tool.poetry.group.dev.dependencies]
