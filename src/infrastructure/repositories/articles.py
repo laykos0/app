@@ -1,4 +1,7 @@
-from src.domain.articles import Article, ArticleId
+from src.domain.articles import (
+    Article,
+    ArticleId
+)
 
 
 async def insert(article: Article):

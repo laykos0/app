@@ -4,7 +4,9 @@ from fastapi import APIRouter, Query, Body, Path, Depends
 
 from src.domain.articles import (
     ArticleId,
-    Article,
+    Article
+)
+from src.infrastructure.dto import (
     ArticleCreateDTO,
     ArticleUpdateDTO
 )
@@ -19,7 +21,8 @@ from src.infrastructure.services.articles import (
     confirm
 )
 from src.infrastructure.services.auth import (
-    get_current_user, is_admin
+    get_current_user,
+    is_admin
 )
 
 router = APIRouter()

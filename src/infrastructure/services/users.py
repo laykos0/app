@@ -1,10 +1,13 @@
 from beanie import PydanticObjectId
 from dataclass_mapper import map_to
+
 from src.domain.users import (
-    UserCreateDTO,
-    UserUpdateDTO,
     UserInDB,
     User
+)
+from src.infrastructure.dto import (
+    UserCreateDTO,
+    UserUpdateDTO
 )
 from src.infrastructure.exceptions import UserNotFoundException
 from src.infrastructure.repositories.users import (

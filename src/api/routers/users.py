@@ -4,10 +4,9 @@ from beanie import PydanticObjectId
 from fastapi import APIRouter, Path, Body, Depends
 
 from src.domain.users import (
-    User,
-    UserCreateDTO,
-    UserUpdateDTO
+    User
 )
+from src.infrastructure.dto import UserCreateDTO, UserUpdateDTO
 from src.infrastructure.services.auth import get_current_user
 from src.infrastructure.services.users import (
     post,

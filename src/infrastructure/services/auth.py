@@ -9,10 +9,12 @@ from jose import JWTError, jwt
 from passlib.context import CryptContext
 
 from src.core.settings import settings
+from src.domain.role import Role
 from src.domain.token import TokenData
-from src.domain.users import UserInDB, Role
+from src.domain.users import UserInDB
 from src.infrastructure.exceptions import (
-    InvalidCredentialsException, InsufficientPermissionException
+    InvalidCredentialsException,
+    InsufficientPermissionException
 )
 from src.infrastructure.repositories.users import find
 

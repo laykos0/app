@@ -1,25 +1,9 @@
-from enum import Enum
-
 from beanie import Document, Indexed
 from dataclass_mapper import mapper, mapper_from, init_with_default, provide_with_extra
 from pydantic import Field, BaseModel
 
-
-class Role(str, Enum):
-    user = "user"
-    admin = "admin"
-
-
-class UserCreateDTO(BaseModel):
-    name: str = Field(..., description="Name of the new user.", example="name")
-    role: Role = Field(..., description="Role of the new user.", example="user")
-    password: str = Field(..., description="Password of the new user.", example="password")
-
-
-class UserUpdateDTO(BaseModel):
-    name: str = Field(..., description="New name of the user.", example="new_name")
-    role: Role = Field(..., description="New role of the user.", example="admin")
-    password: str = Field(..., description="New password of the user.", example="new_password")
+from src.domain.role import Role
+from src.infrastructure.dto import UserCreateDTO, UserUpdateDTO
 
 
 @mapper_from(UserCreateDTO)

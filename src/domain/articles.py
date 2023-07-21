@@ -1,13 +1,30 @@
 from datetime import datetime
 
 from beanie import Document, PydanticObjectId
-from pydantic import Field, BaseModel
+from dataclass_mapper import mapper_from, init_with_default
+from pydantic import Field
 
 from src.domain.version import Version
+from src.infrastructure.dto import (
+    ArticleCreateDTO,
+    ArticleUpdateDTO
+)
 
 ArticleId = str
 
 
+@mapper_from(ArticleCreateDTO,
+             {"id": init_with_default(),
+              "revision_id": init_with_default(),
+              "article_id": init_with_default(),
+              "version": init_with_default()
+              })
+@mapper_from(ArticleUpdateDTO,
+             {"id": init_with_default(),
+              "revision_id": init_with_default(),
+              "article_id": init_with_default(),
+              "version": init_with_default()
+              })
 class Article(Document):
     article_id: ArticleId = Field(default_factory=lambda: datetime.utcnow().isoformat(),
                                   description="Id of the article.")
@@ -28,21 +45,3 @@ class Article(Document):
         if price:
             self.price = price
         self.version.new(user_id, approved, deleted)
-
-
-class ArticleCreateDTO(BaseModel):
-    name: str = Field(..., description="Name of the new article.", example="Book")
-    description: str | None = Field(..., description="Description of the new article.")
-    price: int = Field(..., description="Price of the new article.", example="1")
-
-    def to_document(self):
-        return Article(**self.dict())
-
-
-class ArticleUpdateDTO(BaseModel):
-    name: str = Field(..., description="New name of the article.", example="Book")
-    description: str | None = Field(..., description="New description of the article.")
-    price: int = Field(..., description="New price of the article.", example="1")
-
-    def to_document(self):
-        return Article(**self.dict())
